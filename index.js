@@ -12,7 +12,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 var server = require('http').createServer(app);
 
-
+app.get('/', function(req, res){
+    res.send("Hello world!");
+ });
 
 app.post('/add',function(req,res) {
     console.log("received a post request");
