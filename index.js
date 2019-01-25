@@ -9,11 +9,9 @@ var app= express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-var path = request("path");
 
 var server = require('http').createServer(app);
 
-var io=require('socket.io')(server);
 
 
 app.post('/add',function(req,res) {
@@ -24,8 +22,6 @@ app.post('/add',function(req,res) {
     console.log(req.body);
     console.log("data from the webhook are" + req.body.result.parameters.first_number);
 })
-
-
 app.listen(process.env.PORT || 7000, function() {
     console.log("Server up and listening");
   });
