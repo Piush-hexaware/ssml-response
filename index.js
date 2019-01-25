@@ -1,33 +1,26 @@
 "use strict";
+var request = require('request');
+var express = require('express');
 
-const express = require("express");
-const bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 
-const restService = express();
+var app= express();
 
-restService.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
-restService.use(bodyParser.json());
+var path = request("path");
 
-restService.post("/add", function(req, res) {
-  var speech =
-    req.body.result &&
-    req.body.result.parameters &&
-    req.body.result.parameters.echoText
-      ? req.body.result.parameters.echoText
-      : "Seems like some problem. Speak again.";
-  return res.json({
-    speech: speech,
-    displayText: speech,
-    source: "webhook-echo-sample"
-  });
-});
+var server = require('http').createServer(app);
+
+var io=require('socket.io')(server);
 
 
-restService.listen(process.env.PORT || 8080, function() {
-    console.log("Server up and listening");
-  });
+app.post('/add',function(req,res) {
+    console.log("received a post request");
+    if(!req.body) return res.sendStatus(400)
+    res.setHeader('Content-Type','application/json');
+    console.log('here is the post request from dialogflow');
+    console.log(req.body);
+    console.log("data from the webhook are" + req.body.result.parameters.first_number);
+})
